@@ -1,9 +1,13 @@
 from flask import Flask, render_template
 
 from config import Config
+from database import close_db
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+app.teardown_appcontext(close_db)
 
 @app.route("/")
 def index():
