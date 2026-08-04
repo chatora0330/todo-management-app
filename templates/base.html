@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ToDo管理アプリ</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" 
+        href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+
+            <a class="navbar-brand" href="/">
+                ToDo管理アプリ
+            </a>
+
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h2>ようこそ！</h2>
+
+                <p>
+                    flaskでToDo管理アプリを作成します。
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+    
+</body>
+
+</html>
