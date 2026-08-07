@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}ToDo追加{% endblock %}
+
+{% block content %}
+
+<div class="row justify-cotent-center">
+
+    <div class="col-md-8">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h2 class="mb-4">ToDo追加</h2>
+
+                <form method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">タイトル</label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">詳細</label>
+
+                        <textarea
+                            class="form-control"
+                            name="description"
+                            rows="5"></textarea>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                優先度
+                            </label>
+
+                            <select 
+                                class="form-select"
+                                name="priority">
+
+                                <option>高</option>
+                                <option selected>中</option>
+                                <option>低</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                状態
+                            </label>
+
+                            <select 
+                                class="form-select"
+                                name="status">
+
+                                <option selected>未着手</option>
+                                <option>進行中</option>
+                                <option>完了</option>
+                            
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                締切日
+                            </label>
+
+                            <input
+                                type="date"
+                                class="form-control"
+                                name="deadline">
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <button class="btn btn-success">
+                        登録
+                    </button>
+
+                    <a
+                        href="{{ url_for('todo.index') }}"
+                        class="btn btn-secondary">
+
+                        戻る
+
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

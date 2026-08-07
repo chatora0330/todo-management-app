@@ -11,7 +11,7 @@ ToDo一覧
     <h2>ToDo一覧</h2>
 
     <a
-        href="#"
+        href="{{ url_for('todo.add') }}"
         class="btn btn-success">
 
         + 新規追加
@@ -28,12 +28,10 @@ ToDo一覧
 
 <div class="list-group-item">
 
-    <h5>{{ todo.titles }}</h5>
+    <h5>{{ todo.title }}</h5>
 
     <p class="mb-0">
-
         {{ todo.status }}
-
     </p>
 
 </div>
