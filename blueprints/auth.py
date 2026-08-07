@@ -34,7 +34,7 @@ bp = Blueprint(
 def login():
     
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(url_for("todo.index"))
     
     if request.method == "POST":
         
@@ -66,7 +66,7 @@ def login():
         
         flash("ログインしました。", "success")
         
-        return redirect(url_for("index"))
+        return redirect(url_for("todo.index"))
     
     return render_template("login.html")
 
@@ -75,7 +75,7 @@ def login():
 def signup():
     
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(url_for("todo.index"))
     
     if request.method == "POST":
         

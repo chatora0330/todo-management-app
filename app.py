@@ -10,7 +10,7 @@ from database import close_db, get_db
 from models import User
 
 from blueprints.auth import bp as auth_bp
-
+from blueprints.todo import bp as todo_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,6 +18,8 @@ app.config.from_object(Config)
 app.register_blueprint(auth_bp)
 
 app.teardown_appcontext(close_db)
+
+app.register_blueprint(todo_bp)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -44,11 +46,6 @@ def load_user(user_id):
     
     return None
 
-
-@app.route("/")
-@login_required
-def index():
-    return render_template("base.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

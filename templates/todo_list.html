@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+ToDo一覧
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2>ToDo一覧</h2>
+
+    <a
+        href="#"
+        class="btn btn-success">
+
+        + 新規追加
+
+    </a>
+
+</div>
+
+{% if todos %}
+ 
+<div class="list-group">
+
+{% for todo in todos %}
+
+<div class="list-group-item">
+
+    <h5>{{ todo.titles }}</h5>
+
+    <p class="mb-0">
+
+        {{ todo.status }}
+
+    </p>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+
+    ToDoがありません。
+
+</div>
+
+{% endif %}
+
+{% endblock %}
