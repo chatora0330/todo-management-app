@@ -15,7 +15,8 @@ from werkzeug.security import (
 from flask_login import (
     login_user,
     logout_user,
-    login_required
+    login_required,
+    current_user
 )
 
 from database import get_db
@@ -29,12 +30,52 @@ bp = Blueprint(
 )
 
 
-@bp.route("/login")
+@bp.route("/login", methods=["GET", "POST"])
 def login():
+    
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    
+    if request.method == "POST":
+        
+        username = request.form["username"].strip()
+        password = request.form["password"]
+        
+        db = get_db()
+        
+        row = db.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE username = ?    
+            """,
+            (username,),
+        ).fetchone()
+        
+        if row is None:
+            flash("ユーザー名またはパスワードが違います。", "danger")
+            return redirect(url_for("auth.login"))
+        
+        if not check_password_hash(row["password"], password):
+            flash("ユーザー名またはパスワードが違います。", "danger")
+            return redirect(url_for("auth.login"))
+        
+        user = User.from_row(row)
+        
+        login_user(user)
+        
+        flash("ログインしました。", "success")
+        
+        return redirect(url_for("index"))
+    
     return render_template("login.html")
+
 
 @bp.route("/signup", methods=["GET", "POST"])
 def signup():
+    
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
     
     if request.method == "POST":
         
@@ -83,3 +124,13 @@ def signup():
         return redirect(url_for("auth.login"))
 
     return render_template("signup.html")
+
+@bp.route("/logout")
+@login_required
+def logout():
+    
+    logout_user()
+    
+    flash("ログアウトしました。", "success")
+    
+    return redirect (url_for("auth.login"))
