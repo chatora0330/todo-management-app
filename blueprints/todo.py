@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import (
     Blueprint,
     render_template,
@@ -13,8 +15,7 @@ from flask_login import (
 )
 
 from database import get_db
-
-from datetime import datetime
+from forms import TodoForm
 
 
 bp = Blueprint(
@@ -61,7 +62,9 @@ def add():
             flash("タイトルを入力してください。", "danger")
             return redirect(url_for("todo.add"))
 
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now = datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
+            )
 
         db = get_db()
 
@@ -98,3 +101,86 @@ def add():
         return redirect(url_for("todo.index"))
 
     return render_template("todo_add.html")
+
+
+@bp.route("/<int:todo_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit(todo_id):
+
+    db = get_db()
+
+    todo = db.execute(
+        """
+        SELECT *
+        FROM todos
+        WHERE id = ?
+          AND user_id = ?
+        """,
+        (todo_id, current_user.id),
+    ).fetchone()
+
+    if todo is None:
+        flash("指定されたToDoが見つかりません。", "danger")
+        return redirect(url_for("todo.index"))
+
+    form = TodoForm()
+
+    if form.validate_on_submit():
+
+        now = datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+        db.execute(
+            """
+            UPDATE todos
+            SET
+                title = ?,
+                description = ?,
+                status = ?,
+                priority = ?,
+                deadline = ?,
+                updated_at = ?
+            WHERE id = ?
+              AND user_id = ?
+            """,
+            (
+                form.title.data,
+                form.description.data,
+                form.status.data,
+                form.priority.data,
+                (
+                    form.deadline.data.strftime("%Y-%m-%d")
+                    if form.deadline.data
+                    else None
+                ),
+                now,
+                todo_id,
+                current_user.id,
+            ),
+        )
+
+        db.commit()
+
+        flash("ToDoを更新しました。", "success")
+
+        return redirect(url_for("todo.index"))
+
+    if request.method == "GET":
+
+        form.title.data = todo["title"]
+        form.description.data = todo["description"]
+        form.priority.data = todo["priority"]
+        form.status.data = todo["status"]
+
+        if todo["deadline"]:
+            form.deadline.data = datetime.strptime(
+                todo["deadline"],
+                "%Y-%m-%d"
+            ).date()
+
+    return render_template(
+        "todo_edit.html",
+        form=form,
+        todo=todo,
+    )
