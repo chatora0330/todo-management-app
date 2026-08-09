@@ -1,9 +1,7 @@
 from flask import Flask, render_template
 
-from flask_login import (
-    LoginManager,
-    login_required
-)
+from flask_login import LoginManager
+
 
 from config import Config
 from database import close_db, get_db

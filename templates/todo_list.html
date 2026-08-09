@@ -10,9 +10,7 @@ ToDo一覧
 
     <h2>ToDo一覧</h2>
 
-    <a
-        href="{{ url_for('todo.add') }}"
-        class="btn btn-success">
+    <a href="{{ url_for('todo.add') }}" class="btn btn-success">
 
         + 新規追加
 
@@ -21,22 +19,43 @@ ToDo一覧
 </div>
 
 {% if todos %}
- 
+
 <div class="list-group">
 
-{% for todo in todos %}
+    {% for todo in todos %}
 
-<div class="list-group-item">
+    <div class="list-group-item">
 
-    <h5>{{ todo.title }}</h5>
+        <div class="d-flex justify-content-between align-items-center">
 
-    <p class="mb-0">
-        {{ todo.status }}
-    </p>
+            <div>
 
-</div>
+                <h5>{{ todo.title }}</h5>
 
-{% endfor %}
+                <p class="mb-0">
+                    {{ todo.status }}
+                </p>
+
+            </div>
+
+            <div>
+
+                <a href="{{ url_for(
+                        'todo.edit',
+                        todo_id=todo.id
+                    ) }}" class="btn btn-outline-primary btn-sm">
+
+                    編集
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
 
 </div>
 
