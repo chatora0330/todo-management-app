@@ -2,7 +2,6 @@ import sqlite3
 
 from config import Config
 
-
 conn = sqlite3.connect(Config.DATABASE)
 
 cursor = conn.cursor()

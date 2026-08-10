@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 
+
 class User(UserMixin):
     def __init__(self, id, username, password):
         self.id = id
@@ -8,8 +9,4 @@ class User(UserMixin):
 
     @classmethod
     def from_row(cls, row):
-        return cls(
-            row["id"],
-            row["username"],
-            row["password"]
-        )
+        return cls(row["id"], row["username"], row["password"])

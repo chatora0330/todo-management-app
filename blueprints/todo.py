@@ -2,33 +2,32 @@ from datetime import datetime
 
 from flask import (
     Blueprint,
+    flash,
+    redirect,
     render_template,
     request,
-    redirect,
     url_for,
-    flash,
 )
-
 from flask_login import (
-    login_required,
     current_user,
+    login_required,
 )
 
 from database import get_db
 from forms import TodoForm
-
 
 bp = Blueprint(
     "todo",
     __name__,
 )
 
+
 @bp.route("/")
 @login_required
 def index():
-    
+
     db = get_db()
-    
+
     todos = db.execute(
         """
         SELECT *
@@ -36,22 +35,20 @@ def index():
         WHERE user_id = ?
         ORDER BY created_at DESC
         """,
-        (
-            current_user.id,
-        ),
+        (current_user.id,),
     ).fetchall()
-    
+
     return render_template(
         "todo_list.html",
         todos=todos,
     )
+
 
 @bp.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
 
     if request.method == "POST":
-
         title = request.form["title"].strip()
         description = request.form["description"].strip()
         priority = request.form["priority"]
@@ -62,9 +59,7 @@ def add():
             flash("タイトルを入力してください。", "danger")
             return redirect(url_for("todo.add"))
 
-        now = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-            )
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         db = get_db()
 
@@ -126,10 +121,7 @@ def edit(todo_id):
     form = TodoForm()
 
     if form.validate_on_submit():
-
-        now = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         db.execute(
             """
@@ -167,17 +159,13 @@ def edit(todo_id):
         return redirect(url_for("todo.index"))
 
     if request.method == "GET":
-
         form.title.data = todo["title"]
         form.description.data = todo["description"]
         form.priority.data = todo["priority"]
         form.status.data = todo["status"]
 
         if todo["deadline"]:
-            form.deadline.data = datetime.strptime(
-                todo["deadline"],
-                "%Y-%m-%d"
-            ).date()
+            form.deadline.data = datetime.strptime(todo["deadline"], "%Y-%m-%d").date()
 
     return render_template(
         "todo_edit.html",
