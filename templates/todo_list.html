@@ -49,6 +49,30 @@ ToDo一覧
 
                 </a>
 
+                <form
+                    method="post"
+                    action="{{ url_for(
+                        'todo.delete',
+                        todo_id=todo.id
+                    ) }}"
+                    class="d-inline">
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}">
+                    
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger btn-sm"
+                        onclick="return confirm('このToDoを削除しますか？');">
+                    
+                        削除
+
+                    </button>
+
+                </form>
+
             </div>
 
         </div>

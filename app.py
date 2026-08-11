@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 
 from blueprints.auth import bp as auth_bp
 from blueprints.todo import bp as todo_bp
@@ -9,6 +10,8 @@ from models import User
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+csrf = CSRFProtect(app)
 
 app.register_blueprint(auth_bp)
 

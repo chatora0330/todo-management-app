@@ -172,3 +172,44 @@ def edit(todo_id):
         form=form,
         todo=todo,
     )
+
+@bp.route("/<int:todo_id>/delete", methods=["POST"])
+@login_required
+def delete(todo_id):
+
+    db = get_db()
+    
+    todo = db.execute(
+        """
+        SELECT id
+        FROM todos
+        WHERE id = ?
+          AND user_id = ?
+        """,
+        (
+            todo_id,
+            current_user.id,
+        ),
+    ).fetchone()
+    
+    if todo is None:
+        flash("指定されたToDoが見つかりません。", "danger")
+        return redirect(url_for("todo.index"))
+    
+    db.execute(
+        """
+        DELETE FROM todos
+        WHERE id = ?
+          AND user_id = ?
+        """,
+        (
+            todo_id,
+            current_user.id,
+        ),
+    )
+    
+    db.commit()
+    
+    flash("ToDoを削除しました。", "success")
+    
+    return redirect(url_for("todo.index"))
