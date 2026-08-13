@@ -26,23 +26,75 @@ bp = Blueprint(
 @login_required
 def index():
 
+    keyword = request.args.get(
+        "keyword",
+        ""
+    ).strip()
+
+    status = request.args.get(
+        "status",
+        ""
+    )
+
+    priority = request.args.get(
+        "priority",
+        ""
+    )
+
     db = get_db()
 
-    todos = db.execute(
-        """
+    query = """
         SELECT *
         FROM todos
         WHERE user_id = ?
+    """
+
+    params = [
+        current_user.id
+    ]
+
+    if keyword:
+
+        query += """
+            AND title LIKE ?
+        """
+
+        params.append(
+            f"%{keyword}%"
+        )
+
+    if status:
+
+        query += """
+            AND status = ?
+        """
+
+        params.append(status)
+
+    if priority:
+
+        query += """
+            AND priority = ?
+        """
+
+        params.append(priority)
+
+    query += """
         ORDER BY created_at DESC
-        """,
-        (current_user.id,),
+    """
+
+    todos = db.execute(
+        query,
+        params,
     ).fetchall()
 
     return render_template(
         "todo_list.html",
         todos=todos,
+        keyword=keyword,
+        status=status,
+        priority=priority,
     )
-
 
 @bp.route("/add", methods=["GET", "POST"])
 @login_required
