@@ -30,11 +30,64 @@ ToDo一覧
 
             <div>
 
-                <h5>{{ todo.title }}</h5>
+                <h5 class="mb-2">
+                    {{ todo.title }}
+                </h5>
 
-                <p class="mb-0">
-                    {{ todo.status }}
-                </p>
+                <div class="mb-2">
+
+                    <span class="me-2">
+                        状態：
+                    </span>
+
+                    <form
+                        method="post"
+                        action="{{ url_for(
+                        'todo.update_status',
+                        todo_id=todo.id
+                        ) }}"
+                        class="d-inline">
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}">
+                        
+                        <select
+                            name="status"
+                            class="form-select form-select-sm d-inline-block"
+                            style="width: 120px;"
+                            onchange="this.form.submit()">
+                        
+                            <option
+                                value="未着手"
+                                {% if todo.status == "未着手" %}
+                                    selected
+                                {% endif %}>
+                                未着手
+                            </option>
+
+                            <option
+                                value="進行中"
+                                {% if todo.status == "進行中" %}
+                                    selected
+                                {% endif %}>
+                                進行中
+                            </option>
+
+                            <option
+                                value="完了"
+                                {% if todo.status == "完了" %}
+                                    selected
+                                {% endif %}>
+                                完了
+                            </option>
+
+                        </select>
+
+                    </form>
+
+                </div>
 
             </div>
 

@@ -213,3 +213,65 @@ def delete(todo_id):
     flash("ToDoを削除しました。", "success")
     
     return redirect(url_for("todo.index"))
+
+@bp.route("/<int:todo_id>/status", methods=["POST"])
+@login_required
+def update_status(todo_id):
+    
+    status = request.form.get("status")
+    
+    allowed_statuses = [
+        "未着手",
+        "進行中",
+        "完了",
+    ]
+    
+    if status not in allowed_statuses:
+        flash("不正なステータスです。", "danger")
+        return redirect(url_for("todo.index"))
+    
+    db = get_db()
+    
+    todo = db.execute(
+        """
+        SELECT id
+        FROM todos
+        WHERE id = ?
+          AND user_id = ?
+        """,
+        (
+            todo_id,
+            current_user.id,
+        ),
+    ).fetchone()
+    
+    if todo is None:
+        flash("指定されたToDoが見つかりません。", "danger")
+        return redirect(url_for("todo.index"))
+    
+    now = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+    
+    db.execute(
+        """
+        UPDATE todos
+        SET
+            status = ?,
+            updated_at = ?
+        WHERE id = ?
+          AND user_id = ?
+        """,
+        (
+            status,
+            now,
+            todo_id,
+            current_user.id,
+        ),
+    )
+    
+    db.commit()
+    
+    flash("ステータスを変更しました。", "success")
+    
+    return redirect(url_for("todo.index"))
