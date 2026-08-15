@@ -40,6 +40,11 @@ def index():
         "priority",
         ""
     )
+    
+    sort = request.args.get(
+        "sort",
+        "created_desc"
+    )
 
     db = get_db()
 
@@ -52,7 +57,8 @@ def index():
     params = [
         current_user.id
     ]
-
+    
+    # タイトル検索
     if keyword:
 
         query += """
@@ -63,6 +69,7 @@ def index():
             f"%{keyword}%"
         )
 
+    # ステータス絞り込み
     if status:
 
         query += """
@@ -71,6 +78,7 @@ def index():
 
         params.append(status)
 
+    # 優先度絞り込み
     if priority:
 
         query += """
@@ -78,9 +86,40 @@ def index():
         """
 
         params.append(priority)
+        
+    # 並び替え
+    sort_options = {
+        
+        "created_desc":
+            "created_at DESC",
+            
+        "created_asc":
+            "created_at ASC",
+            
+        "deadline_asc":
+            "deadline ASC",
+            
+        "deadline_desc":
+            "deadline DESC",
+        
+        "priority":
+            """
+            CASE priority
+                WHEN '高' THEN 1
+                WHEN '中' THEN 2
+                WHEN '低' THEN 3
+                ELSE 4
+            END ASC
+            """,
+    }
+    
+    order_by = sort_options.get(
+        sort,
+        "created_at DESC"
+    )
 
-    query += """
-        ORDER BY created_at DESC
+    query += f"""
+        ORDER BY {order_by}
     """
 
     todos = db.execute(

@@ -118,6 +118,61 @@ ToDo一覧
 
                 </div>
 
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        並び替え
+                    </label>
+
+                    <select
+                        name="sort"
+                        class="form-select">
+
+                        <option
+                            value="created_desc"
+                            {% if sort == "created_desc" %}
+                                selected
+                            {% endif %}>
+                            作成日：新しい順
+                        </option>
+
+                        <option
+                            value="created_asc"
+                            {% if sort == "created_asc" %}
+                                selected
+                            {% endif %}>
+                            作成日：古い順
+                        </option>
+
+                        <option
+                            value="deadline_asc"
+                            {% if sort == "deadline_asc" %}
+                                selected
+                            {% endif %}>
+                            締切日：近い順
+                        </option>
+                        
+
+                        <option
+                            value="deadline_desc"
+                            {% if sort == "deadline_desc" %}
+                                selected
+                            {% endif %}>
+                            締切日：遠い順
+                        </option>
+
+                        <option
+                            value="priority"
+                            {% if sort == "priority" %}
+                                selected
+                            {% endif %}>
+                            優先度：高い順
+                        </option>
+
+                    </select>
+
+                </div>
+
                 <div class="col-md-1 d-flex align-items-end">
 
                     <button
