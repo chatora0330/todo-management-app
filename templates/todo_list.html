@@ -15,7 +15,7 @@ ToDo一覧
         </h5>
 
         <form method="get"
-            action=" {{ url_for('todo.index')}}">
+            action="{{ url_for('todo.index')}}">
             
             <div class="row g-3">
 
@@ -343,6 +343,120 @@ ToDo一覧
     条件に一致するToDoがありません。
 
 </div>
+
+{% endif %}
+
+
+{% if total_pages > 1 %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        <!-- 前へ　-->
+
+        {% if page > 1 %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                    'todo.index',
+                    page=page - 1,
+                    keyword=keyword,
+                    status=status,
+                    priority=priority,
+                    sort=sort
+                ) }}">
+
+                前へ
+
+            </a>
+
+        </li>
+
+        {% else %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                前へ
+            </span>
+
+        </li>
+
+        {% endif %}
+
+
+        <!-- ページ番号　-->
+        
+        {% for p in range(1, total_pages + 1) %}
+
+        <li
+            class="page-item
+            {% if p == page %}
+                active
+            {% endif %}">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                'todo.index',
+                page=p,
+                keyword=keyword,
+                status=status,
+                priority=priority,
+                sort=sort
+                ) }}">
+            
+                {{ p }}
+            
+            </a>
+
+        </li>
+
+        {% endfor %}
+
+
+        <!-- 次へ　-->
+        
+        {% if page < total_pages %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                'todo.index',
+                page=page + 1,
+                keyword=keyword,
+                status=status,
+                priority=priority,
+                sort=sort
+                ) }}">
+            
+                次へ
+            
+            </a>
+
+        </li>
+
+        {% else %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                次へ
+            </span>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
 
 {% endif %}
 

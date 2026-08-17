@@ -21,6 +21,7 @@ bp = Blueprint(
     __name__,
 )
 
+PER_PAGE = 10
 
 @bp.route("/")
 @login_required
@@ -45,12 +46,23 @@ def index():
         "sort",
         "created_desc"
     )
-
+    
+    page = request.args.get(
+        "page",
+        1,
+        type=int
+    )
+    
+    if page < 1:
+        page = 1
+        
+    offset = (page - 1) * PER_PAGE
+    
     db = get_db()
+    
+    # where句
 
-    query = """
-        SELECT *
-        FROM todos
+    where = """
         WHERE user_id = ?
     """
 
@@ -61,7 +73,7 @@ def index():
     # タイトル検索
     if keyword:
 
-        query += """
+        where += """
             AND title LIKE ?
         """
 
@@ -72,7 +84,7 @@ def index():
     # ステータス絞り込み
     if status:
 
-        query += """
+        where += """
             AND status = ?
         """
 
@@ -81,7 +93,7 @@ def index():
     # 優先度絞り込み
     if priority:
 
-        query += """
+        where += """
             AND priority = ?
         """
 
@@ -117,15 +129,44 @@ def index():
         sort,
         "created_at DESC"
     )
-
-    query += f"""
-        ORDER BY {order_by}
+    
+    # 総件数
+    
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM todos
+        {where}    
     """
+    
+    total = db.execute(
+        count_query,
+        params
+    ).fetchone()[0]
+    
+    
+    query = f"""
+        SELECT *
+        FROM todos
+        {where}
+        ORDER BY {order_by}
+        LIMIT ? OFFSET ?
+    """
+    
+    todo_params = params + [
+        PER_PAGE,
+        offset,
+    ]
 
     todos = db.execute(
         query,
-        params,
+        todo_params
     ).fetchall()
+    
+    # 総ページ数
+    
+    total_pages = (
+        total + PER_PAGE -1
+    ) // PER_PAGE
 
     return render_template(
         "todo_list.html",
@@ -133,6 +174,9 @@ def index():
         keyword=keyword,
         status=status,
         priority=priority,
+        sort=sort,
+        page=page,
+        total_pages=total_pages,
     )
 
 @bp.route("/add", methods=["GET", "POST"])
