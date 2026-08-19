@@ -10,9 +10,22 @@ ToDo一覧
 
     <div class="card-body">
 
-        <h5 class="card-title mb-3">
-            ToDo検索
-        </h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="card-title mb-0">
+                🔎 ToDo検索・絞り込み
+            </h5>
+
+            <a
+                href="{{ url_for('todo.index' )}}"
+                class="btn btn-outline-secondary btn-sm">
+            
+                リセット
+            
+            </a>
+
+        </div>
+
 
         <form method="get"
             action="{{ url_for('todo.index')}}">
@@ -185,18 +198,6 @@ ToDo一覧
 
                 </div>
 
-                <div class="col-md-1 d-flex align-items-end">
-
-                    <a
-                        href="{{ url_for('todo.index')}}"
-                        class="btn btn-secondary w-100">
-                    
-                        リセット
-                    
-                    </a>
-
-                </div>
-
             </div>
             
         </form>
@@ -226,82 +227,117 @@ ToDo一覧
 
     <div class="list-group-item">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between">
 
-            <div>
+            <!-- 左側　-->
+            <div class="flex-grow-1">
 
-                <h5 class="mb-2">
+                <h5 
+                    class="mb-2
+                    {% if todo.status == '完了' %}
+                        todo-completed
+                    {% endif %}">
+
                     {{ todo.title }}
+
+                    {% if todo.status == "完了" %}
+
+                        <span class="badge bg-success ms-2">
+                            完了
+                        </span>
+                    
+                    {% elif todo.status == "進行中" %}
+
+                        <span class="badge bg-warning text-dark ms-2">
+                            進行中
+                        </span>
+
+                    {% else %}
+                    
+                        <span class="badge bg-secondary ms-2">
+                            未着手
+                        </span>
+                    
+                    {% endif %}
+
                 </h5>
 
-                <div class="mb-2">
 
-                    <span class="me-2">
-                        状態：
+                {% if todo.description %}
+
+                    <p class="text-muted mb-2">
+                        {{ todo.description }}
+                    </p>
+                
+                {% endif %}
+
+
+                <div class="small text-muted">
+
+                    <span class="me-3">
+
+                        優先度：
+
+                        {% if todo.priority == "高" %}
+
+                            <span class="badge bg-danger">
+                                高
+                            </span>
+
+                        {% elif todo.priority == "中" %}
+
+                            <span class="badge bg-warning text-dark">
+                                中
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                低
+                            </span>
+
+                        {% endif %}
+
                     </span>
 
-                    <form
-                        method="post"
-                        action="{{ url_for(
-                        'todo.update_status',
-                        todo_id=todo.id
-                        ) }}"
-                        class="d-inline">
 
-                        <input
-                            type="hidden"
-                            name="csrf_token"
-                            value="{{ csrf_token() }}">
-                        
-                        <select
-                            name="status"
-                            class="form-select form-select-sm d-inline-block"
-                            style="width: 120px;"
-                            onchange="this.form.submit()">
-                        
-                            <option
-                                value="未着手"
-                                {% if todo.status == "未着手" %}
-                                    selected
-                                {% endif %}>
-                                未着手
-                            </option>
+                    {% if todo.deadline %}
 
-                            <option
-                                value="進行中"
-                                {% if todo.status == "進行中" %}
-                                    selected
-                                {% endif %}>
-                                進行中
-                            </option>
+                        <span>
 
-                            <option
-                                value="完了"
-                                {% if todo.status == "完了" %}
-                                    selected
-                                {% endif %}>
-                                完了
-                            </option>
+                            締切：
 
-                        </select>
+                            {{ todo.deadline }}
 
-                    </form>
+                        </span>
+                    
+                    {% else %}
+
+                        <span>
+                            締切：なし
+                        </span>
+
+                    {% endif %}
 
                 </div>
-
+            
             </div>
 
-            <div>
 
-                <a href="{{ url_for(
+            <!-- 右側 -->
+            <div class="ms-3">
+
+                <a
+                    href="{{ url_for(
                         'todo.edit',
                         todo_id=todo.id
-                    ) }}" class="btn btn-outline-primary btn-sm">
-
+                        ) }}"
+                    class="btn btn-outline-primary btn-sm">
+                
                     編集
-
+                
                 </a>
-
+        
                 <form
                     method="post"
                     action="{{ url_for(
@@ -314,20 +350,22 @@ ToDo一覧
                         type="hidden"
                         name="csrf_token"
                         value="{{ csrf_token() }}">
-                    
+
                     <button
                         type="submit"
                         class="btn btn-outline-danger btn-sm"
-                        onclick="return confirm('このToDoを削除しますか？');">
+                        onclick="return confirm(
+                            'このToDoを削除しますか？'
+                        );">
                     
                         削除
 
                     </button>
-
+                
                 </form>
 
             </div>
-
+        
         </div>
 
     </div>
@@ -338,9 +376,23 @@ ToDo一覧
 
 {% else %}
 
-<div class="alert alert-info">
+<div class="text-center py-5">
 
-    条件に一致するToDoがありません。
+    <h5 class="text-muted">
+        ToDoがありません。
+    </h5>
+
+    <p class="text-muted">
+        新しいToDoを追加して下さい。
+    </p>
+
+    <a
+        href="{{ url_for('todo.add') }}"
+        class="btn btn-success">
+    
+        ＋ ToDoを追加
+
+    </a>
 
 </div>
 

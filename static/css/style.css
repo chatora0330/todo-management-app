@@ -5,3 +5,8 @@ body{
 .card{
     border-radius: 15px;
 }
+
+.todo-completed{
+    text-decoration: line-through;
+    opacity: 0.65;
+}
