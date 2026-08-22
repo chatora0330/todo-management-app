@@ -10,18 +10,26 @@ from wtforms.validators import DataRequired, Length
 
 
 class TodoForm(FlaskForm):
+    
     title = StringField(
         "タイトル",
         validators=[
             DataRequired(message="タイトルを入力してください。"),
-            Length(max=100, message="タイトルは100文字以内で入力してください。"),
+            Length(
+                max=100, 
+                message="タイトルは100文字以内で入力してください。"
+            ),
         ],
     )
 
     description = TextAreaField(
         "詳細",
         validators=[
-            Length(max=1000, message="詳細は1000文字以内で入力してください。"),
+            Length(
+                min=-1,
+                max=1000,
+                message="詳細は1000文字以内で入力してください。"
+            ),
         ],
     )
 

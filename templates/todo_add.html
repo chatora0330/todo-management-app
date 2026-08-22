@@ -14,32 +14,48 @@
 
                 <h2 class="mb-4">ToDo追加</h2>
 
-                <form method="post">
+                <form method="post" novalidate>
 
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}">
+                    {{ form.hidden_tag() }}
 
                     <div class="mb-3">
-                        <label class="form-label">タイトル</label>
 
-                        <input
-                            type="text"
-                            name="title"
+                        {{ form.title.label(
+                            class="form-label"
+                        ) }}
+
+                        {{ form.title(
                             class="form-control"
-                            required>
+                        ) }}
+
+                        {% for error in form.title.errors %}
+
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
 
                     </div>
 
                     <div class="mb-3">
 
-                        <label class="form-label">詳細</label>
+                        {{ form.description.label(
+                            class="form-label"
+                        ) }}
 
-                        <textarea
-                            class="form-control"
-                            name="description"
-                            rows="5"></textarea>
+                        {{ form.description(
+                            class="form-control",
+                            rows="5"
+                        ) }}
+
+                        {% for error in form.description.errors %}
+
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
 
                     </div>
 
@@ -47,68 +63,58 @@
 
                         <div class="col-md-4">
 
-                            <label class="form-label">
-                                優先度
-                            </label>
+                            {{ form.priority.label(
+                                class="form-label"
+                            ) }}
 
-                            <select 
+                            {{ form.priority(
                                 class="form-select"
-                                name="priority">
-
-                                <option>高</option>
-                                <option selected>中</option>
-                                <option>低</option>
-
-                            </select>
+                            ) }}
 
                         </div>
 
                         <div class="col-md-4">
 
-                            <label class="form-label">
-                                状態
-                            </label>
+                            {{ form.status.label(
+                                class="form-label"
+                            ) }}
 
-                            <select 
+                            {{ form.status(
                                 class="form-select"
-                                name="status">
-
-                                <option selected>未着手</option>
-                                <option>進行中</option>
-                                <option>完了</option>
-                            
-                            </select>
+                            ) }}
 
                         </div>
 
                         <div class="col-md-4">
 
-                            <label class="form-label">
-                                締切日
-                            </label>
+                            {{ form.deadline.label(
+                                class="form-label"
+                            ) }}
 
-                            <input
-                                type="date"
+                            {{ form.deadline(
                                 class="form-control"
-                                name="deadline">
+                            ) }}
 
                         </div>
 
                     </div>
 
-                    <hr>
+                    <div class="mt-4">
 
-                    <button class="btn btn-success">
-                        登録
-                    </button>
+                        {{ form.submit(
+                            value="登録",
+                            class="btn btn-success"
+                        ) }}
 
-                    <a
-                        href="{{ url_for('todo.index') }}"
-                        class="btn btn-secondary">
+                        <a
+                            href="{{ url_for('todo.index') }}"
+                            class="btn btn-secondary">
 
-                        戻る
+                            戻る
 
-                    </a>
+                        </a>
+
+                    </div>
 
                 </form>
 
