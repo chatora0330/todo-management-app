@@ -63,12 +63,11 @@ project/
 │
 ├── app.py
 ├── config.py
-├── schema.sql
 ├── README.md
 ├── .gitignore
+├── pyproject.toml
 │
 ├── blueprints/
-│   ├── __init__.py
 │   ├── auth.py
 │   └── todo.py
 │
