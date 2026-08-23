@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import (
     Blueprint,
+    current_app,
     flash,
     redirect,
     render_template,
@@ -21,9 +22,6 @@ bp = Blueprint(
     __name__,
 )
 
-PER_PAGE = 10
-
-
 @bp.route("/")
 @login_required
 def index():
@@ -41,7 +39,8 @@ def index():
     if page < 1:
         page = 1
 
-    offset = (page - 1) * PER_PAGE
+    per_page = current_app.config["PER_PAGE"]
+    offset = (page - 1) * per_page
 
     db = get_db()
 
@@ -114,7 +113,7 @@ def index():
     """
 
     todo_params = params + [
-        PER_PAGE,
+        per_page,
         offset,
     ]
 
@@ -122,7 +121,7 @@ def index():
 
     # 総ページ数
 
-    total_pages = (total + PER_PAGE - 1) // PER_PAGE
+    total_pages = (total + per_page - 1) // per_page
 
     return render_template(
         "todo_list.html",
