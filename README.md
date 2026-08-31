@@ -58,7 +58,6 @@ Python・Flask・データベース・CRUD・Blueprint・Flask-WTF・Gitなど�
 
 ## 📂 プロジェクト構成
 
-```text
 todo-management-app/
 │
 ├── app.py                  # Flaskアプリの起動
