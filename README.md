@@ -58,6 +58,7 @@ Python・Flask・データベース・CRUD・Blueprint・Flask-WTF・Gitなど�
 
 ## 📂 プロジェクト構成
 
+```text
 todo-management-app/
 │
 ├── app.py                  # Flaskアプリの起動
@@ -94,20 +95,6 @@ todo-management-app/
 └── static/
     └── css/
         └── style.css       # CSS
-```
-
-## 🗄 データベース
-
-SQLiteを使用しています。
-
-### usersテーブル
-
-```sql
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-);
 ```
 
 ### todosテーブル
