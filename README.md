@@ -58,42 +58,46 @@ Python・Flask・データベース・CRUD・Blueprint・Flask-WTF・Gitなど�
 
 ## 📂 プロジェクト構成
 
+## 📂 プロジェクト構成
+
+```text
 todo-management-app/
 │
-├── app.py
-├── config.py
-├── database.py
-├── form.py
-├── init_db.py
-├── models.py
+├── app.py                  # Flaskアプリの起動
+├── config.py               # アプリの設定
+├── database.py             # データベース接続
+├── form.py                 # フォーム定義
+├── init_db.py              # データベース初期化
+├── models.py               # データベースモデル
 │
-├── README.md
-├── .gitignore
-├── pyproject.toml
-├── requirement.txt
+├── README.md               # プロジェクト説明
+├── .gitignore              # Git管理から除外するファイル
+├── pyproject.toml          # Pythonプロジェクト設定
+├── requirement.txt         # 必要なライブラリ
 │
-├── screenshots/
-│   ├── login.png
-│   ├── register.png
-│   ├── todo_list.png
-│   ├── todo_add.png
-│   └── todo_edit.png
+├── screenshots/            # README用スクリーンショット
+│   ├── login.png           # ログイン画面
+│   ├── register.png        # ユーザー登録画面
+│   ├── todo_list.png       # ToDo一覧画面
+│   ├── todo_add.png        # ToDo追加画面
+│   └── todo_edit.png       # ToDo編集画面
 │
-├── blueprints/
-│   ├── auth.py
-│   └── todo.py
+├── blueprints/             # Flask Blueprint
+│   ├── auth.py             # 認証関連
+│   └── todo.py             # ToDo関連
 │
-├── templates/
-│   ├── base.html
-│   ├── login.html
-│   ├── signup.html
-│   ├── todo_list.html
-│   ├── todo_add.html
-│   └── todo_edit.html
+├── templates/              # HTMLテンプレート
+│   ├── base.html           # 共通レイアウト
+│   ├── login.html          # ログイン画面
+│   ├── signup.html         # ユーザー登録画面
+│   ├── todo_list.html      # ToDo一覧画面
+│   ├── todo_add.html       # ToDo追加画面
+│   └── todo_edit.html      # ToDo編集画面
 │
 └── static/
     └── css/
-        └── style.css
+        └── style.css       # CSS
+```
 
 ## 🗄 データベース
 
