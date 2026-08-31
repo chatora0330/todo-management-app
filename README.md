@@ -66,19 +66,19 @@ todo-management-app/
 ├── form.py
 ├── init_db.py
 ├── models.py
-|
+│
 ├── README.md
 ├── .gitignore
 ├── pyproject.toml
 ├── requirement.txt
-|
+│
 ├── screenshots/
 │   ├── login.png
-|   ├── register.png
-|   ├── todo_list.png
-|   ├── todo_add.png
-|   └── todo_edit.png
-|
+│   ├── register.png
+│   ├── todo_list.png
+│   ├── todo_add.png
+│   └── todo_edit.png
+│
 ├── blueprints/
 │   ├── auth.py
 │   └── todo.py
