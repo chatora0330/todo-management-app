@@ -1,72 +1,84 @@
 # ToDo管理アプリ
 
-Flask + SQLiteで作成したToDo管理Webアプリです。
+FlaskとSQLiteを使って作成した、ログイン機能付きのToDo管理アプリです。
 
-Python / Flaskの学習を目的として、ユーザー認証からToDoのCRUD、
-検索、絞り込み、並び替え、ページネーションまで実装しています。
+Python・Flask・データベース・CRUD・Blueprint・Flask-WTF・Gitなどの基本的なWebアプリ開発を学習することを目的として作成しました。
 
-## 概要
+## 📌 主な機能
 
-ユーザーごとにToDoを管理できるWebアプリです。
+* ユーザー登録
+* ログイン・ログアウト
+* ToDoの登録
+* ToDo一覧表示
+* ToDoの編集
+* ToDoの削除
+* ToDoのステータス管理
+* ToDoの優先度管理
+* 期限の設定
+* ToDoのページネーション
+* フォーム入力のバリデーション
+* CSRF対策
+* ユーザーごとのToDo管理
 
-ログインしたユーザーは、自分のToDoを登録・編集・削除できます。
+## 🖥 スクリーンショット
 
-また、ToDoのステータスや優先度を設定したり、
-検索・絞り込み・並び替えを行うことができます。
+### ログイン画面
 
-## 主な機能
+![ログイン画面](screenshots/login.png)
 
-- ユーザー登録
-- ログイン・ログアウト
-- パスワードのハッシュ化
-- CSRF対策
-- ToDoの登録
-- ToDoの一覧表示
-- ToDoの編集
-- ToDoの削除
-- ステータス変更
-- 優先度設定
-- 締切日設定
-- タイトル検索
-- ステータス絞り込み
-- 優先度絞り込み
-- 並び替え
-- ページネーション
-- ユーザーごとのToDo管理
+### ユーザー登録画面
 
-## 使用技術
+![ユーザー登録画面](screenshots/register.png)
 
-- Python
-- Flask
-- Flask-Login
-- Flask-WTF
-- WTForms
-- SQLite
-- Bootstrap
-- HTML / CSS
-- Git / GitHub
+### ToDo一覧
 
-## セキュリティ
+![ToDo一覧](screenshots/todo_list.png)
 
-以下の対策を実装しています。
+### ToDo追加画面
 
-- パスワードのハッシュ化
-- CSRF対策
-- ログインユーザーのみToDo操作可能
-- SQLのプレースホルダー使用
-- ユーザーIDによるデータアクセス制御
+![ToDo追加画面](screenshots/todo_add.png)
 
-## ディレクトリ構成
+### ToDo編集画面
 
-```text
-project/
+![ToDo編集画面](screenshots/todo_edit.png)
+
+## 🛠 使用技術
+
+| 技術           | 内容                 |
+| ------------ | ------------------ |
+| Python       | 3.x                |
+| Flask        | Webアプリケーションフレームワーク |
+| SQLite       | データベース             |
+| Flask-Login  | ログイン・認証管理          |
+| Flask-WTF    | フォーム・CSRF対策        |
+| WTForms      | フォームバリデーション        |
+| Bootstrap    | 画面デザイン             |
+| Werkzeug     | パスワードのハッシュ化        |
+| Git / GitHub | バージョン管理            |
+
+## 📂 プロジェクト構成
+
+todo-management-app/
 │
 ├── app.py
 ├── config.py
+├── database.py
+├── form.py
+├── init_db.py
+├── models.py
+|
 ├── README.md
 ├── .gitignore
 ├── pyproject.toml
-│
+├── requirement.txt
+|
+├── screenshots/
+│   ├── login.png
+|   ├── register.png
+|   ├── todo_list.png
+|   ├── todo_add.png
+|   └── todo_edit.png
+|
 ├── blueprints/
 │   ├── auth.py
 │   └── todo.py
@@ -82,3 +94,182 @@ project/
 └── static/
     └── css/
         └── style.css
+
+## 🗄 データベース
+
+SQLiteを使用しています。
+
+### usersテーブル
+
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
+```
+
+### todosテーブル
+
+```sql
+CREATE TABLE todos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    status TEXT NOT NULL DEFAULT "未着手",
+    priority TEXT NOT NULL DEFAULT "中",
+    deadline TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+```
+
+## 🚀 セットアップ
+
+### 1. リポジトリをクローン
+
+```bash
+git clone https://github.com/chatora0330/todo-management-app.git
+cd todo-management-app
+```
+
+### 2. 仮想環境を作成
+
+Windowsの場合：
+
+```bash
+python -m venv venv
+```
+
+### 3. 仮想環境を有効化
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. 必要なライブラリをインストール
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. SECRET_KEYを設定
+
+環境変数にSECRET_KEYを設定します。
+
+Windows PowerShellの場合：
+
+```powershell
+$env:SECRET_KEY="任意の秘密の文字列"
+```
+
+### 6. アプリを起動
+
+```bash
+python app.py
+```
+
+ブラウザで以下にアクセスします。
+
+```text
+http://127.0.0.1:5000/
+```
+
+## 🔐 セキュリティ
+
+このアプリでは、以下の対策を行っています。
+
+* パスワードをハッシュ化して保存
+* Flask-Loginによるログイン管理
+* Flask-WTFによるCSRF対策
+* SECRET_KEYを環境変数で管理
+* ログインユーザーごとにToDoを管理
+
+パスワードは平文ではデータベースに保存せず、Werkzeugの`generate_password_hash()`を使用してハッシュ化しています。
+
+## 📝 ToDoのステータス
+
+ToDoには以下のステータスを設定できます。
+
+* 未着手
+* 進行中
+* 完了
+
+## ⭐ 優先度
+
+ToDoには優先度を設定できます。
+
+* 高
+* 中
+* 低
+
+## 📅 期限
+
+ToDoごとに期限を設定できます。
+
+期限を設定することで、いつまでに対応する必要があるToDoなのかを管理できます。
+
+## 📄 バリデーション
+
+フォームには入力チェックを実装しています。
+
+### タイトル
+
+* 必須
+* 100文字以内
+
+### 詳細
+
+* 1000文字以内
+
+入力内容に問題がある場合は、日本語のエラーメッセージを表示します。
+
+## 📖 学習したこと
+
+このアプリの制作を通して、以下の内容を学習しました。
+
+* Flaskの基本
+* Flaskのルーティング
+* Blueprint
+* SQLite
+* SQL
+* CRUD処理
+* ユーザー認証
+* Flask-Login
+* パスワードのハッシュ化
+* Flask-WTF
+* WTForms
+* CSRF対策
+* バリデーション
+* ページネーション
+* Jinja2テンプレート
+* Bootstrap
+* 環境変数
+* Git
+* Gitブランチ
+
+## 🌱 今後追加したい機能
+
+今後、以下の機能追加を予定しています。
+
+* [ ] ToDoの検索機能
+* [ ] ステータスによる絞り込み
+* [ ] 優先度による並び替え
+* [ ] 期限切れToDoの表示
+* [ ] 完了したToDoの表示切り替え
+* [ ] ユーザープロフィール
+* [ ] パスワード変更
+* [ ] テストコードの追加
+* [ ] デプロイ
+
+## 🎯 制作目的
+
+Python未経験からWebアプリケーション開発を学習するために制作しました。
+
+Flaskを使ったWebアプリの基本的な構造を理解し、データベース操作、ユーザー認証、フォーム処理、Gitによるバージョン管理など、Web開発に必要な基礎知識を実際にコードを書きながら学習しています。
+
+## 📜 License
+
+This project is for learning purposes.
