@@ -28,11 +28,11 @@ Python・Flask・データベース・CRUD・Blueprint・Flask-WTF・Gitなど�
 
 ### ログイン画面
 
-![ログイン画面](screenshots/login.png)
+![ログイン画面](screenshots/todo_login.png)
 
 ### ユーザー登録画面
 
-![ユーザー登録画面](screenshots/register.png)
+![ユーザー登録画面](screenshots/todo_register.png)
 
 ### ToDo一覧
 
@@ -78,8 +78,8 @@ todo-management-app/
 ├── requirement.txt         # 必要なライブラリ
 │
 ├── screenshots/            # README用スクリーンショット
-│   ├── login.png           # ログイン画面
-│   ├── register.png        # ユーザー登録画面
+│   ├── todo_login.png      # ログイン画面
+│   ├── todo_register.png   # ユーザー登録画面
 │   ├── todo_list.png       # ToDo一覧画面
 │   ├── todo_add.png        # ToDo追加画面
 │   └── todo_edit.png       # ToDo編集画面
